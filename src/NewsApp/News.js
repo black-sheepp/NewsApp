@@ -300,7 +300,6 @@ export default class News extends Component {
      ];
      constructor() {
           super();
-          console.log("Hello, i am a constructor");
           this.state = {
                article: this.article,
                loading: false,
@@ -314,8 +313,8 @@ export default class News extends Component {
                          {this.state.article.map((element) => {
                               return <div className="col-md-3" key={element.url}>
                                    <NewsItems
-                                        title={element.title.slice(0,80)}
-                                        description={element.description.slice(0,100)}
+                                        title={element.title}
+                                        description={element.description}
                                         imageURL={element.urlToImage}
                                         newsURL={element.url}
                                    />
