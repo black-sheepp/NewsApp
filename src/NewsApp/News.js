@@ -14,7 +14,7 @@ export default class News extends Component {
 
      async componentDidMount() {
           let url =
-               "https://newsapi.org/v2/everything?q=tesla&from=2023-03-29&sortBy=publishedAt&apiKey=be082017bae842fc877e1798503d251f&pageSize=20";
+               "https://newsapi.org/v2/everything?q=apple&from=2023-04-29&to=2023-04-29&sortBy=popularity&apiKey=be082017bae842fc877e1798503d251f&pageSize=20";
 
           let data = await fetch(url);
           let parseData = await data.json();
@@ -23,7 +23,7 @@ export default class News extends Component {
      }
 
      handleNextClick = async () => {
-          let url = `https://newsapi.org/v2/everything?q=tesla&from=2023-03-29&sortBy=publishedAt&apiKey=be082017bae842fc877e1798503d251f&page=${
+          let url = `https://newsapi.org/v2/everything?q=apple&from=2023-04-29&to=2023-04-29&sortBy=popularity&apiKey=be082017bae842fc877e1798503d251f&page=${
                this.state.page + 1
           }&pageSize=20`;
 
@@ -37,9 +37,8 @@ export default class News extends Component {
           });
      };
      handlePrevClick = async () => {
-          let url = `https://newsapi.org/v2/everything?q=tesla&from=2023-03-29&sortBy=publishedAt&apiKey=be082017bae842fc877e1798503d251f&page=${
-               this.state.page - 1
-          }&pageSize=20`;
+          let url = `https://newsapi.org/v2/everything?q=apple&from=2023-04-29&to=2023-04-29&sortBy=popularity&apiKey=be082017bae842fc877e1798503d251f
+          &page=${this.state.page - 1}&pageSize=20`;
 
           let data = await fetch(url);
           let parseData = await data.json();
