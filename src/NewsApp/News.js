@@ -1,14 +1,14 @@
 import React, { Component } from "react";
 import NewsItems from "./NewsItems";
 import Loader from "./Loader";
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types'
+
 
 export default class News extends Component {
-     defaultProps = {
+     static defaultProps = {
           country: "in",
-          pageSize: 8,
-          category: 'general'
-          
+          pageSize: 9,
+          category: "general",
      };
      PropTypes = {
           country: PropTypes.string,
@@ -35,9 +35,9 @@ export default class News extends Component {
      }
 
      handleNextClick = async () => {
-          let url = `https://newsapi.org/v2/top-headlines?country=${
-               this.props.country
-          }&category=${this.props.category}&apiKey=be082017bae842fc877e1798503d251f&page=${this.state.page + 1}&pageSize=${this.props.pageSize}`;
+          let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${
+               this.props.category
+          }&apiKey=be082017bae842fc877e1798503d251f&page=${this.state.page + 1}&pageSize=${this.props.pageSize}`;
           this.setState({ loading: true });
           let data = await fetch(url);
           let parseData = await data.json();
@@ -50,9 +50,9 @@ export default class News extends Component {
           });
      };
      handlePrevClick = async () => {
-          let url = `https://newsapi.org/v2/top-headlines?country=${
-               this.props.country
-          }&category=${this.props.category}&apiKey=be082017bae842fc877e1798503d251f
+          let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${
+               this.props.category
+          }&apiKey=be082017bae842fc877e1798503d251f
           &page=${this.state.page - 1}&pageSize=${this.props.pageSize}`;
           this.setState({ loading: true });
           let data = await fetch(url);
@@ -66,10 +66,15 @@ export default class News extends Component {
           });
      };
 
+     capitalize(word){
+          let x = word.slice(1);
+          return word.charAt(0).toUpperCase() + x
+     }
+
      render() {
           return (
                <div className="container mx-6 my-3">
-                    <h1 className="text-center">Headlines Today</h1>
+                    <h1 className="text-center">Headlines: {(this.props.category==="general")?"Today":this.capitalize(this.props.category)}</h1>
                     {this.state.loading && <Loader />}
                     {!this.state.loading && (
                          <div className="row">
@@ -81,6 +86,8 @@ export default class News extends Component {
                                                   description={element.description}
                                                   imageURL={element.urlToImage}
                                                   newsURL={element.url}
+                                                  author={element.author}
+                                                  onDate={element.publishedAt}
                                              />
                                         </div>
                                    );
@@ -92,11 +99,11 @@ export default class News extends Component {
                               disabled={this.state.page <= 1}
                               onClick={this.handlePrevClick}
                               type="button"
-                              class="btn btn-dark"
+                              className="btn btn-dark"
                          >
                               &larr; Prev
                          </button>
-                         <button onClick={this.handleNextClick} type="button" class="btn btn-dark">
+                         <button onClick={this.handleNextClick} type="button" className="btn btn-dark">
                               Next &rarr;
                          </button>
                     </div>

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 export default class NewsItems extends Component {
      render() {
-        let {title, description, imageURL, newsURL} = this.props;
+        let {title, description, imageURL, newsURL, author, onDate} = this.props;
           return (
                <div className="card mb-3" >
                     <img src={`${imageURL}`} className="card-img-top" alt="..." />
@@ -11,6 +11,7 @@ export default class NewsItems extends Component {
                          <p className="card-text">
                               {description}
                          </p>
+                         <p className="card-text"><small className="text-muted">{author} on {new Date(onDate).toGMTString()}</small></p>
                          <a href={`${newsURL}`} target="_blank" rel="noreferrer" className="btn btn-sm btn-dark">
                               Read More...
                          </a>
