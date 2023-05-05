@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import NewsItems from "./NewsItems";
 import Loader from "./Loader";
-import PropTypes from 'prop-types'
-
+import PropTypes from "prop-types";
 
 export default class News extends Component {
      static defaultProps = {
@@ -16,65 +15,48 @@ export default class News extends Component {
           category: PropTypes.string,
      };
 
-     constructor() {
-          super();
+     constructor(props) {
+          super(props);
           this.state = {
                articles: [],
                loading: false,
                page: 1,
           };
+          document.title = `News Monkey | ${this.capitalize((this.props.category==="general"? "Home":this.props.category))}`
      }
 
-     async componentDidMount() {
-          let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=be082017bae842fc877e1798503d251f&pageSize=${this.props.pageSize}`;
+     async updateNews() {
+          let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=fbde2314305248488f3f38e2224ab602&page=${this.state.page}&pageSize=${this.props.pageSize}`;
           this.setState({ loading: true });
           let data = await fetch(url);
           let parseData = await data.json();
-          console.log(parseData);
           this.setState({ articles: parseData.articles, loading: false });
      }
 
-     handleNextClick = async () => {
-          let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${
-               this.props.category
-          }&apiKey=be082017bae842fc877e1798503d251f&page=${this.state.page + 1}&pageSize=${this.props.pageSize}`;
-          this.setState({ loading: true });
-          let data = await fetch(url);
-          let parseData = await data.json();
-          console.log(parseData);
+     async componentDidMount() {
+          this.updateNews();
+     }
 
-          this.setState({
-               page: this.state.page + 1,
-               articles: parseData.articles,
-               loading: false,
-          });
+     handleNextClick = async () => {
+          await this.setState({ page: this.state.page + 1 });
+          this.updateNews();
      };
      handlePrevClick = async () => {
-          let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${
-               this.props.category
-          }&apiKey=be082017bae842fc877e1798503d251f
-          &page=${this.state.page - 1}&pageSize=${this.props.pageSize}`;
-          this.setState({ loading: true });
-          let data = await fetch(url);
-          let parseData = await data.json();
-          console.log(parseData);
-
-          this.setState({
-               page: this.state.page - 1,
-               articles: parseData.articles,
-               loading: false,
-          });
+          await this.setState({ page: this.state.page - 1 });
+          this.updateNews();
      };
 
-     capitalize(word){
+     capitalize(word) {
           let x = word.slice(1);
-          return word.charAt(0).toUpperCase() + x
+          return word.charAt(0).toUpperCase() + x;
      }
 
      render() {
           return (
                <div className="container mx-6 my-3">
-                    <h1 className="text-center">Headlines: {(this.props.category==="general")?"Today":this.capitalize(this.props.category)}</h1>
+                    <h1 className="text-center mb-4">
+                         Top Headlines: {this.props.category === "general" ? "Today" : this.capitalize(this.props.category)}
+                    </h1>
                     {this.state.loading && <Loader />}
                     {!this.state.loading && (
                          <div className="row">
@@ -84,10 +66,15 @@ export default class News extends Component {
                                              <NewsItems
                                                   title={element.title}
                                                   description={element.description}
-                                                  imageURL={element.urlToImage}
+                                                  imageURL={
+                                                       element.urlToImage
+                                                            ? element.urlToImage
+                                                            : "https://plus.unsplash.com/premium_photo-1661776217775-ba332ee9566e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2340&q=80"
+                                                  }
                                                   newsURL={element.url}
                                                   author={element.author}
                                                   onDate={element.publishedAt}
+                                                  source={element.source.name}
                                              />
                                         </div>
                                    );
